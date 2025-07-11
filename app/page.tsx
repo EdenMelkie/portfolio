@@ -393,6 +393,27 @@ export default function Home() {
                       View
                     </a>
                   </div>
+                  <div className="card h-full shadow-sm rounded-lg border border-gray-200 flex flex-col">
+                      <div className="card-body p-6 flex-grow">
+                        <h5 className="card-title text-xl font-semibold mb-3">
+                          Personal Portfolio Website
+                        </h5>
+                        <p className="card-text text-gray-700">
+                          My own portfolio website built/Developed using Next js
+                          Language
+                        </p>
+                      </div>
+                      <div className="card-footer p-4 bg-gray-100 rounded-b-lg">
+                        <a
+                          href="https://github.com/EdenMelkie/portfolio"
+                          className="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded block text-center"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          View Project
+                        </a>
+                      </div>
+                    </div>
 
                   <div className="portfolio-item" data-category="mobile">
                     <div className="card h-full shadow-sm rounded-lg border border-gray-200 flex flex-col">
@@ -441,27 +462,7 @@ export default function Home() {
                   </div>
 
                   <div className="portfolio-item" data-category="web">
-                    <div className="card h-full shadow-sm rounded-lg border border-gray-200 flex flex-col">
-                      <div className="card-body p-6 flex-grow">
-                        <h5 className="card-title text-xl font-semibold mb-3">
-                          Personal Portfolio Website
-                        </h5>
-                        <p className="card-text text-gray-700">
-                          My own portfolio website built/Developed using Next js
-                          Language
-                        </p>
-                      </div>
-                      <div className="card-footer p-4 bg-gray-100 rounded-b-lg">
-                        <a
-                          href="https://github.com/EdenMelkie/portfolio"
-                          className="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded block text-center"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          View Project
-                        </a>
-                      </div>
-                    </div>
+                    
                   </div>
                 </div>
               </section>
