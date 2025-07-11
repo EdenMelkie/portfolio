@@ -200,36 +200,13 @@ export default function Home() {
                     <strong>Institution:</strong> Debre Markos University
                   </p>
                 </>
-
-                <h5 className="font-semibold text-lg">Collaborator</h5>
-                <div className="flex items-center mt-2">
-                  <img
-                    src="/images/eden_melkamu.png"
-                    alt="Eden Melkamu"
-                    className="rounded-full shadow me-3"
-                    style={{
-                      width: 60,
-                      height: 60,
-                      objectFit: "cover",
-                      border: "3px solid #198754",
-                      marginRight: "0.75rem", // Tailwind's 'me-3' is margin-end 3, approx 0.75rem
-                    }}
-                    loading="lazy"
-                  />
-                  <div>
-                    <h6 className="mb-0 text-base font-medium">Eden Melkamu</h6>
-                    <small className="text-gray-500">
-                      Project Collaborator
-                    </small>
-                  </div>
-                </div>
               </section>
               <section id="about" className="bg-white p-6 rounded-lg shadow">
                 <h3 className="text-2xl font-semibold text-blue-600 border-b-2 border-blue-500 pb-1 mb-4">
                   About Me
                 </h3>
                 <p>
-                  With over 5 years of experience, I have developed a deep
+                  With over 3 years of experience, I have developed a deep
                   understanding of modern technologies including Flutter,
                   Laravel, React, Node.js, and PHP. I am a strong advocate of
                   clean code, user-centered design, and continuous learning.
@@ -243,6 +220,7 @@ export default function Home() {
                 <ul className="list-disc list-inside space-y-1">
                   <li>Flutter & Dart (Mobile & Web Apps)</li>
                   <li>Laravel, PHP & MySQL (Backend & APIs)</li>
+                  <li>Networking,</li>
                   <li>React & Next.js (Frontend Web Apps)</li>
                   <li>JavaScript, TypeScript, Node.js</li>
                   <li>UI/UX Design, Responsive & Accessible Design</li>
@@ -397,7 +375,6 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-
 
                   {/* Hailemariam portfolio */}
                   <div className="bg-white shadow-md rounded-lg p-4">
