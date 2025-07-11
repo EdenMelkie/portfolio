@@ -453,7 +453,7 @@ export default function Home() {
                       </div>
                       <div className="card-footer p-4 bg-gray-100 rounded-b-lg">
                         <a
-                          href="https://personal-portfolio-zdwa.vercel.app/"
+                          href="https://github.com/EdenMelkie/portfolio"
                           className="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded block text-center"
                           target="_blank"
                           rel="noreferrer"
