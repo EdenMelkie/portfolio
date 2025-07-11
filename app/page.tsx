@@ -3,12 +3,31 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Sidebar from "./components/sidebar";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
-const Header: React.FC<{
-  toggleSidebar: () => void;
-  toggleDarkMode: () => void;
-  isDarkMode: boolean;
-}> = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
+const PortfolioCard = ({ title, description, url, category }) => (
+  <div className={`portfolio-item`} data-category={category}>
+    <div className="bg-white shadow-lg rounded-xl overflow-hidden flex flex-col h-full border border-gray-200 hover:shadow-2xl transition-shadow duration-300">
+      <div className="p-6 flex-grow">
+        <h3 className="text-2xl font-semibold text-gray-800 mb-3">{title}</h3>
+        <p className="text-gray-600">{description}</p>
+      </div>
+      <div className="bg-gray-100 px-6 py-4">
+        <a
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-block text-center w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
+        >
+          View Project
+        </a>
+      </div>
+    </div>
+  </div>
+);
+
+const Header = ({ toggleSidebar, toggleDarkMode, isDarkMode }) => {
   return (
     <nav
       className={`navbar navbar-expand-lg fixed-top shadow-sm z-50 ${
@@ -23,47 +42,29 @@ const Header: React.FC<{
         >
           <span className="navbar-toggler-icon" />
         </button>
-
         <a className="navbar-brand fw-bold" href="#">
           Hailemariam Eyayu
         </a>
-
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarTop"
-          aria-controls="navbarTop"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon" />
-        </button>
-
         <div className="collapse navbar-collapse" id="navbarTop">
           <ul className="navbar-nav ms-auto gap-2 align-items-center">
-            {[
-              { href: "#about", label: "About Me" },
-              { href: "#skills", label: "Skills" },
-              { href: "#portfolio", label: "Portfolio" },
-              { href: "#downloads", label: "CV & Certificates" },
-              { href: "#contact", label: "Contact" },
-            ].map(({ href, label }) => (
-              <li key={href} className="nav-item">
-                <a
-                  className="nav-link px-3 py-2 rounded text-white"
-                  href={href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.querySelector(href)?.scrollIntoView({
-                      behavior: "smooth",
-                    });
-                  }}
-                >
-                  {label}
-                </a>
-              </li>
-            ))}
+            {["about", "skills", "portfolio", "downloads", "contact"].map(
+              (id) => (
+                <li key={id} className="nav-item">
+                  <a
+                    className="nav-link px-3 py-2 rounded text-white"
+                    href={`#${id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document
+                        .querySelector(`#${id}`)
+                        ?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                  >
+                    {id.charAt(0).toUpperCase() + id.slice(1)}
+                  </a>
+                </li>
+              )
+            )}
             <li className="nav-item">
               <button
                 onClick={toggleDarkMode}
@@ -71,17 +72,12 @@ const Header: React.FC<{
                   isDarkMode ? "btn btn-outline-light" : "btn btn-outline-dark"
                 }`}
                 style={{ width: "38px", height: "38px" }}
-                aria-label={
-                  isDarkMode ? "Switch to light mode" : "Switch to dark mode"
-                }
-                title="Toggle Night Mode"
               >
                 {isDarkMode ? (
-                  // Sun icon (for light mode)
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
                     fill="currentColor"
+                    viewBox="0 0 24 24"
                     width="20"
                     height="20"
                   >
@@ -95,11 +91,10 @@ const Header: React.FC<{
                     />
                   </svg>
                 ) : (
-                  // Moon icon (for dark mode)
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
                     fill="currentColor"
+                    viewBox="0 0 24 24"
                     width="20"
                     height="20"
                   >
@@ -124,6 +119,7 @@ export default function Home() {
 
   useEffect(() => {
     document.body.classList.toggle("dark-mode", isDarkMode);
+    AOS.init({ once: true, duration: 800 });
   }, [isDarkMode]);
 
   return (
@@ -132,7 +128,7 @@ export default function Home() {
         <title>Hailemariam Eyayu - Full-Stack & Mobile Developer</title>
         <meta
           name="description"
-          content="Portfolio of Hailemariam Eyayu, experienced Full-Stack and Mobile Developer skilled in Flutter, Laravel, PHP, JavaScript, and more."
+          content="Portfolio of Hailemariam Eyayu, experienced Full-Stack and Mobile Developer."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -149,7 +145,7 @@ export default function Home() {
           isOpen={sidebarOpen}
           onNavClick={(id) => {
             document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
-            setSidebarOpen(false); // auto-close on nav click for mobile
+            setSidebarOpen(false);
           }}
         />
 
@@ -168,428 +164,212 @@ export default function Home() {
               </p>
             </header>
 
-            <main className="w-full max-w-3xl flex flex-col gap-10">
-              <section className="bg-white p-6 rounded-lg shadow">
-                <h1 className="text-3xl font-bold text-gray-800 mb-1">
-                  HME - Hailemariam Eyayu
-                </h1>
-                <h2 className="text-xl font-medium text-gray-600 mb-4">
-                  Full-Stack & Mobile Developer
-                </h2>
-                <p>
-                  Passionate and experienced software engineer skilled in mobile
-                  and web development. I enjoy turning ideas into real-world
-                  apps with modern design and clean architecture.
-                </p>
-              </section>
+            <section
+              id="about"
+              className="bg-white p-6 rounded-lg shadow w-full max-w-3xl mb-10"
+            >
+              <h3 className="text-2xl font-semibold text-blue-600 border-b-2 border-blue-500 pb-1 mb-4">
+                About Me
+              </h3>
+              <p>
+                With over 3 years of experience, I have developed a deep
+                understanding of modern technologies including Flutter, Laravel,
+                React, Node.js, and PHP. I am a strong advocate of clean code,
+                user-centered design, and continuous learning.
+              </p>
+            </section>
 
-              <section
-                id="collaborator"
-                className="bg-white p-6 rounded-lg shadow"
+            <section
+              id="skills"
+              className="bg-white p-6 rounded-lg shadow w-full max-w-3xl mb-10"
+            >
+              <h3 className="text-2xl font-semibold text-blue-600 border-b-2 border-blue-500 pb-1 mb-4">
+                Skills
+              </h3>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Flutter & Dart (Mobile & Web Apps)</li>
+                <li>Laravel, PHP & MySQL (Backend & APIs)</li>
+                <li>React & Next.js (Frontend Web Apps)</li>
+                <li>JavaScript, TypeScript, Node.js</li>
+                <li>UI/UX Design, Responsive & Accessible Design</li>
+                <li>Git, CI/CD, Agile & Scrum</li>
+              </ul>
+            </section>
+
+            <section id="portfolio" className="mb-16" data-aos="fade-up">
+              <h2 className="text-4xl font-bold text-center mb-10 text-gray-800">
+                My Portfolio
+              </h2>
+              <div className="flex justify-center flex-wrap gap-4 mb-8">
+                {["All", "Web", "Mobile"].map((type) => (
+                  <button
+                    key={type}
+                    className="px-5 py-2 rounded-full border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300 filter-btn"
+                    data-filter={type.toLowerCase()}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </div>
+              <div
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+                id="portfolio-items"
               >
-                <>
-                  <h5 className="font-semibold text-lg">Education</h5>{" "}
-                  <hr className="my-4 border-gray-300" />
-                  <p className="mb-1">
-                    <strong>Degree:</strong> Bachelor of Science (BSc)
-                  </p>
-                  <p className="mb-1">
-                    <strong>Field:</strong> Software Engineering
-                  </p>
-                  <p>
-                    <strong>Institution:</strong> Debre Markos University
-                  </p>
-                </>
-              </section>
-              <section id="about" className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-2xl font-semibold text-blue-600 border-b-2 border-blue-500 pb-1 mb-4">
-                  About Me
-                </h3>
-                <p>
-                  With over 3 years of experience, I have developed a deep
-                  understanding of modern technologies including Flutter,
-                  Laravel, React, Node.js, and PHP. I am a strong advocate of
-                  clean code, user-centered design, and continuous learning.
-                </p>
-              </section>
+                <PortfolioCard
+                  title="Dormitory Management System (DMU_DMS)"
+                  description="A comprehensive Laravel + PHP system for managing university dormitories."
+                  url="https://github.com/EdenMelkie/dmudms"
+                  category="web"
+                />
+                <PortfolioCard
+                  title="Personal Portfolio Website"
+                  description="Responsive website built with Next.js showcasing my skills and projects."
+                  url="https://github.com/EdenMelkie/portfolio"
+                  category="web"
+                />
+                <PortfolioCard
+                  title="My Laravel Portfolio"
+                  description="Personal Laravel-based portfolio highlighting back-end and UI experience."
+                  url="https://github.com/EdenMelkie/personal-portfolio"
+                  category="web"
+                />
+                <PortfolioCard
+                  title="Gitsawe APK"
+                  description="Spiritual mobile app built with Flutter and Dart, featuring daily religious readings."
+                  url="https://github.com/EdenMelkie/gitsawe"
+                  category="mobile"
+                />
+                <PortfolioCard
+                  title="Calendar APK"
+                  description="Android app in Java for religious and calendar-based content."
+                  url="https://github.com/EdenMelkie/Calander"
+                  category="mobile"
+                />
+              </div>
+            </section>
 
-              <section id="skills" className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-2xl font-semibold text-blue-600 border-b-2 border-blue-500 pb-1 mb-4">
-                  Skills
-                </h3>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>Flutter & Dart (Mobile & Web Apps)</li>
-                  <li>Laravel, PHP & MySQL (Backend & APIs)</li>
-                  <li>Networking,</li>
-                  <li>React & Next.js (Frontend Web Apps)</li>
-                  <li>JavaScript, TypeScript, Node.js</li>
-                  <li>UI/UX Design, Responsive & Accessible Design</li>
-                  <li>Git, CI/CD, Agile & Scrum</li>
-                </ul>
-              </section>
+            <section
+              id="downloads"
+              className="bg-white p-6 rounded-lg shadow max-w-4xl mx-auto"
+            >
+              <h3 className="text-2xl font-semibold text-blue-600 border-b-2 border-blue-500 pb-1 mb-4">
+                CV & Certificates
+              </h3>
 
-              <section id="certificates" className="mb-10">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                  {/* DMU Students Union Certificate */}
-                  <div className="card h-full shadow-sm border border-gray-200 rounded-lg">
-                    <div className="card-body p-6 flex flex-col justify-between">
-                      <div>
-                        <h5 className="text-xl font-semibold mb-2">
-                          DMU Students Union
-                        </h5>
-                        <p className="text-gray-500 mb-4">
-                          Leadership certificate
-                        </p>
-                      </div>
-                      <a
-                        href="/downloads/dmu_union_cert.pdf"
-                        download
-                        className="btn btn-success bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-center block"
-                      >
-                        Download Certificate
-                      </a>
-                    </div>
-                  </div>
+              <p className="mb-4">
+                You can download my professional CV and certificates to learn
+                more about my skills, education, and accomplishments.
+              </p>
 
-                  {/* edX Certificate */}
-                  <div className="card h-full shadow-sm border border-gray-200 rounded-lg">
-                    <div className="card-body p-6 flex flex-col justify-between">
-                      <div>
-                        <h5 className="text-xl font-semibold mb-2">
-                          edX Course
-                        </h5>
-                        <p className="text-gray-500 mb-4">
-                          Completed online course
-                        </p>
-                      </div>
-                      <a
-                        href="/downloads/edx_course_cert.pdf"
-                        download
-                        className="btn btn-secondary bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded text-center block"
-                      >
-                        Download Certificate
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* 5 Million Coders Certificate */}
-                  <div className="card h-full shadow-sm border border-gray-200 rounded-lg">
-                    <div className="card-body p-6 flex flex-col justify-between">
-                      <div>
-                        <h5 className="text-xl font-semibold mb-2">
-                          5 Million Coders
-                        </h5>
-                        <p className="text-gray-500 mb-4">
-                          Coding initiative participation
-                        </p>
-                      </div>
-                      <a
-                        href="/downloads/five_million_coders_cert.pdf"
-                        download
-                        className="btn btn-warning bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded text-center block"
-                      >
-                        Download Certificate
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* SSH Certificate */}
-                  <div className="bg-white shadow-md rounded-lg p-4">
-                    <h5 className="text-lg font-semibold mb-1">SSH Training</h5>
-                    <p className="text-gray-600 mb-3">
-                      Security & server hosting
-                    </p>
-                    <a
-                      href="/downloads/ssh_cert.pdf"
-                      download
-                      className="btn btn-dark"
-                    >
-                      Download Certificate
-                    </a>
-                  </div>
-
-                  {/* Hailemariam CV */}
-                  <div className="bg-white shadow-md rounded-lg p-4">
-                    <h5 className="text-lg font-semibold mb-1">My CV</h5>
-                    <p className="text-gray-600 mb-3">
-                      Curriculum Vitae (Resume)
-                    </p>
-                    <a
-                      href="/downloads/hailemariam_cv.pdf"
-                      download
-                      className="btn btn-primary"
-                    >
-                      Download CV
-                    </a>
-                  </div>
-                </div>
-              </section>
-
-              <section id="portfolio" className="mb-10" data-aos="fade-up">
-                <h2 className="text-3xl font-bold mb-6">Portfolio</h2>
-                <div className="mb-4 flex flex-wrap gap-2">
-                  <button
-                    className="btn btn-outline-primary me-2 filter-btn active px-4 py-2 rounded border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition"
-                    data-filter="all"
+              <ul className="list-disc list-inside space-y-2">
+                <li>
+                  <a
+                    href="/files/Hailemariam_Eyayu_CV.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                    download
                   >
-                    All
-                  </button>
-                  <button
-                    className="btn btn-outline-primary me-2 filter-btn px-4 py-2 rounded border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition"
-                    data-filter="web"
+                    Download CV (PDF)
+                  </a>{" "}
+                  – Detailed resume with professional experience and education.
+                </li>
+
+                <li>
+                  <a
+                    href="/files/Certificate_Laravel_2024.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                    download
                   >
-                    Web
-                  </button>
-                  <button
-                    className="btn btn-outline-primary me-2 filter-btn px-4 py-2 rounded border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition"
-                    data-filter="mobile"
+                    Laravel Certification (2024)
+                  </a>{" "}
+                  – Completion certificate for advanced Laravel development.
+                </li>
+
+                <li>
+                  <a
+                    href="/files/Certificate_Flutter_2023.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                    download
                   >
-                    Mobile
-                  </button>
-                </div>
+                    Flutter Development Certificate (2023)
+                  </a>{" "}
+                  – Training and proficiency in Flutter & Dart.
+                </li>
 
-                <div
-                  className="grid grid-cols-1 md:grid-cols-3 gap-6"
-                  id="portfolio-items"
-                >
-                  <div className="portfolio-item" data-category="web">
-                    <div className="card h-full shadow-sm rounded-lg border border-gray-200 flex flex-col">
-                      <div className="card-body p-6 flex-grow">
-                        <h5 className="card-title text-xl font-semibold mb-3">
-                          Dormitory Management System (DMU_DMS)
-                        </h5>
-                        <p className="card-text text-gray-700">
-                          A comprehensive management system for student housing
-                          using Laravel and PHP.
-                        </p>
-                      </div>
-                      <div className="card-footer p-4 bg-gray-100 rounded-b-lg">
-                        <a
-                          href="https://github.com/EdenMelkie/dmudms"
-                          className="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded block text-center"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          View Project
-                        </a>
-                      </div>
-                    </div>
-                  </div>
+                <li>
+                  <a
+                    href="/files/Other_Certificates.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                    download
+                  >
+                    Other Certificates (PDF)
+                  </a>{" "}
+                  – Various professional and technical certificates.
+                </li>
+              </ul>
+            </section>
 
-                  {/* Hailemariam portfolio */}
-                  <div className="bg-white shadow-md rounded-lg p-4">
-                    <h5 className="text-lg font-semibold mb-1">
-                      My Personal Portfolio
-                    </h5>
-                    <p className="text-gray-600 mb-3">
-                      My own portfolio website built with Laravel, showcasing my
-                      projects and skills.{" "}
-                    </p>
-                    <a
-                      href="https://github.com/EdenMelkie/personal-portfolio"
-                      download
-                      className="btn btn-primary"
-                    >
-                      View
-                    </a>
-                  </div>
-                  <div className="card h-full shadow-sm rounded-lg border border-gray-200 flex flex-col">
-                      <div className="card-body p-6 flex-grow">
-                        <h5 className="card-title text-xl font-semibold mb-3">
-                          Personal Portfolio Website
-                        </h5>
-                        <p className="card-text text-gray-700">
-                          My own portfolio website built/Developed using Next js
-                          Language
-                        </p>
-                      </div>
-                      <div className="card-footer p-4 bg-gray-100 rounded-b-lg">
-                        <a
-                          href="https://github.com/EdenMelkie/portfolio"
-                          className="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded block text-center"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          View Project
-                        </a>
-                      </div>
-                    </div>
+           <section className="w-[50%] mx-auto">
 
-                  <div className="portfolio-item" data-category="mobile">
-                    <div className="card h-full shadow-sm rounded-lg border border-gray-200 flex flex-col">
-                      <div className="card-body p-6 flex-grow">
-                        <h5 className="card-title text-xl font-semibold mb-3">
-                          Gitsawe APK
-                        </h5>
-                        <p className="card-text text-gray-700">
-                          A mobile app developed with Flutter and Dart, focusing
-                          on religious content.
-                        </p>
-                      </div>
-                      <div className="card-footer p-4 bg-gray-100 rounded-b-lg">
-                        <a
-                          href="https://github.com/EdenMelkie/gitsawe"
-                          className="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded block text-center"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          View Project
-                        </a>
-                      </div>
-                    </div>
-
-                    <div className="card h-full shadow-sm rounded-lg border border-gray-200 flex flex-col">
-                      <div className="card-body p-6 flex-grow">
-                        <h5 className="card-title text-xl font-semibold mb-3">
-                          Calender APK
-                        </h5>
-                        <p className="card-text text-gray-700">
-                          A mobile app developed with Android with Java,
-                          focusing on religious content.
-                        </p>
-                      </div>
-                      <div className="card-footer p-4 bg-gray-100 rounded-b-lg">
-                        <a
-                          href="https://github.com/EdenMelkie/Calander"
-                          className="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded block text-center"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          View Project
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="portfolio-item" data-category="web">
-                    
-                  </div>
-                </div>
-              </section>
-
-              <section
-                id="downloads"
-                className="bg-white p-6 rounded-lg shadow"
+              <form
+                action="https://formspree.io/f/xjkwqorb"
+                method="POST"
+                className="needs-validation"
               >
-                <h3 className="text-2xl font-semibold text-blue-600 border-b-2 border-blue-500 pb-1 mb-4">
-                  CV & Certificates
-                </h3>
+                <div className="mb-3">
+                  <label htmlFor="name" className="form-label fw-semibold">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    required
+                    className="form-control"
+                  />
+                </div>
 
-                <p className="mb-4">
-                  You can download my professional CV and certificates to learn
-                  more about my skills, education, and accomplishments.
-                </p>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label fw-semibold">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    required
+                    className="form-control"
+                  />
+                </div>
 
-                <ul className="list-disc list-inside space-y-2">
-                  <li>
-                    <a
-                      href="/files/Hailemariam_Eyayu_CV.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline"
-                      download
-                    >
-                      Download CV (PDF)
-                    </a>{" "}
-                    – Detailed resume with professional experience and
-                    education.
-                  </li>
+                <div className="mb-3">
+                  <label htmlFor="message" className="form-label fw-semibold">
+                    Message
+                  </label>
+                  <textarea
+                    name="message"
+                    id="message"
+                    rows={4}
+                    required
+                    className="form-control"
+                  ></textarea>
+                </div>
 
-                  <li>
-                    <a
-                      href="/files/Certificate_Laravel_2024.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline"
-                      download
-                    >
-                      Laravel Certification (2024)
-                    </a>{" "}
-                    – Completion certificate for advanced Laravel development.
-                  </li>
+                <button type="submit" className="btn btn-primary">
+                  Send Message
+                </button>
+              </form>
+            </section>
 
-                  <li>
-                    <a
-                      href="/files/Certificate_Flutter_2023.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline"
-                      download
-                    >
-                      Flutter Development Certificate (2023)
-                    </a>{" "}
-                    – Training and proficiency in Flutter & Dart.
-                  </li>
-
-                  <li>
-                    <a
-                      href="/files/Other_Certificates.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline"
-                      download
-                    >
-                      Other Certificates (PDF)
-                    </a>{" "}
-                    – Various professional and technical certificates.
-                  </li>
-                </ul>
-              </section>
-              <section>
-                <form
-                  action="https://formspree.io/f/xjkwqorb"
-                  method="POST"
-                  className="needs-validation"
-                >
-                  <div className="mb-3">
-                    <label htmlFor="name" className="form-label fw-semibold">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      id="name"
-                      required
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="email" className="form-label fw-semibold">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      id="email"
-                      required
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="message" className="form-label fw-semibold">
-                      Message
-                    </label>
-                    <textarea
-                      name="message"
-                      id="message"
-                      rows={4}
-                      required
-                      className="form-control"
-                    ></textarea>
-                  </div>
-
-                  <button type="submit" className="btn btn-primary">
-                    Send Message
-                  </button>
-                </form>
-              </section>
-            </main>
-          </div>
-          <div>
-            <footer className="bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900 text-gray-100 py-6 mt-12">
-              <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <footer className="w-full bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900 text-gray-100 py-6 mt-12">
+              <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
                 <p className="text-sm">
                   &copy; {new Date().getFullYear()} Hailemariam Eyayu. All
                   rights reserved.
